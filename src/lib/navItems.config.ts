@@ -12,6 +12,7 @@ import {
   BellRing,
   Settings,
   Network,
+  Tags,
 } from "lucide-react";
 import { UserRole } from "./auth-utils";
 
@@ -53,6 +54,11 @@ export const dashboardNav: Record<UserRole, NavItem[]> = {
       title: "Curriculum Taxonomy",
       href: "/admin/dashboard/curriculum-taxonomy",
       icon: Network,
+    },
+    {
+      title: "Metadata & Tags",
+      href: "/admin/dashboard/metadata-tags",
+      icon: Tags,
     },
     {
       title: "Add Student Whitelist",
