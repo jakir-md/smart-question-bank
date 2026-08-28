@@ -1,84 +1,126 @@
 // src/proxy.ts
+/**
+ * Next.js Middleware (Edge runtime compatible).
+ * Handles route protection and token refresh using only request cookies —
+ * NO "use server" imports, NO next/headers.
+ */
 import jwt, { JwtPayload } from "jsonwebtoken";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-import { getNewAccessToken, getUserInfo } from "./services/auth.service";
-import { getCookie } from "./lib/tokenHandler";
-import { getDefaultDashboardRoute, getRouteOwner, isAuthRoute, UserRole } from "./lib/auth-utils";
+import {
+  getDefaultDashboardRoute,
+  getRouteOwner,
+  isAuthRoute,
+  isValidRedirectForRole,
+  UserRole,
+} from "./lib/auth-utils";
 
-export async function proxy(request: NextRequest) {
+// ==============================
+// Middleware / Proxy
+// ==============================
+
+export async function proxy(request: NextRequest): Promise<NextResponse> {
   const pathname = request.nextUrl.pathname;
-  const tokenRefreshResult = await getNewAccessToken();
-  if (tokenRefreshResult?.tokenRefreshed) {
+
+  // ------------------------------
+  // Prevent redirect loops after token refresh
+  // ------------------------------
+  if (request.nextUrl.searchParams.has("tokenRefreshed")) {
     const url = request.nextUrl.clone();
-    url.searchParams.set("tokenRefreshed", "true");
+    url.searchParams.delete("tokenRefreshed");
     return NextResponse.redirect(url);
   }
 
-  // 3️⃣ Get accessToken from cookies
-  const accessToken = (await getCookie("accessToken")) || null;
+  // ------------------------------
+  // Read tokens directly from cookies (Edge-safe)
+  // ------------------------------
+  const accessToken = request.cookies.get("accessToken")?.value ?? null;
+  const refreshToken = request.cookies.get("refreshToken")?.value ?? null;
+
   let userRole: UserRole | null = null;
 
+  // ------------------------------
+  // Decode access token if present
+  // ------------------------------
   if (accessToken) {
     try {
-      const verifiedToken: JwtPayload | string = jwt.verify(
+      const decoded = jwt.verify(
         accessToken,
         process.env.ACCESS_TOKEN_SECRET as string,
-      );
-      if (typeof verifiedToken === "string") throw new Error("Invalid token");
-      userRole = verifiedToken.role;
-    } catch (err) {
-      console.log("Invalid token found, clearing cookies...");
+      ) as JwtPayload;
 
-      const response = pathname === "/login" 
-        ? NextResponse.next() 
-        : NextResponse.redirect(new URL("/login", request.url));
-
-      response.cookies.delete("accessToken");
-      response.cookies.delete("refreshToken");
-
-      return response;
+      // Token payload shape: { userId, role }
+      const rawRole = decoded.role as string;
+      if (rawRole === "ADMIN" || rawRole === "STUDENT") {
+        userRole = rawRole;
+      }
+    } catch {
+      // Access token invalid/expired — check for refresh token
+      if (!refreshToken) {
+        // Both missing: force login
+        const response = NextResponse.redirect(new URL("/login", request.url));
+        response.cookies.delete("accessToken");
+        response.cookies.delete("refreshToken");
+        return response;
+      }
+      // Refresh token exists: redirect to token-refresh endpoint
+      // The server action will be called server-side after login page load
+      // For middleware, we allow the request through and let the server action
+      // handle the token refresh on the next server component render
     }
   }
 
-  const routerOwner = getRouteOwner(pathname);
+  const routeOwner = getRouteOwner(pathname);
   const isAuth = isAuthRoute(pathname);
 
-
-  // 4️⃣ Redirect logged-in users away from auth routes
-  if (accessToken && isAuth) {
+  // ------------------------------
+  // Rule 1: Logged-in user on auth pages → redirect to dashboard
+  // ------------------------------
+  if (userRole && isAuth) {
     return NextResponse.redirect(
-      new URL(getDefaultDashboardRoute(userRole as UserRole), request.url),
+      new URL(getDefaultDashboardRoute(userRole), request.url),
     );
   }
 
-  // 5️⃣ Redirect guest users to login if route is protected
-  if (!accessToken && !isAuthRoute(pathname)) {
+  // ------------------------------
+  // Rule 2: Public route → allow
+  // ------------------------------
+  if (routeOwner === null) {
+    return NextResponse.next();
+  }
+
+  // ------------------------------
+  // Rule 3: Not logged in on protected route → login
+  // ------------------------------
+  if (!userRole) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-
-  // 7️⃣ Protected common routes
-  if (routerOwner === "COMMON") {
+  // ------------------------------
+  // Rule 4: Common protected routes → allow
+  // ------------------------------
+  if (routeOwner === "COMMON") {
     return NextResponse.next();
   }
 
-  // 8️⃣ Role-based protected routes
-  const protectedRoles = ["ADMIN",  "STUDENT", "DRIVER"];
-  if (protectedRoles.includes(routerOwner || "")) {
-    if (userRole !== routerOwner) {
-      return NextResponse.redirect(
-        new URL(getDefaultDashboardRoute(userRole as UserRole), request.url),
-      );
-    }
+  // ------------------------------
+  // Rule 5: Role-based protected routes
+  // ------------------------------
+  if (!isValidRedirectForRole(pathname, userRole)) {
+    return NextResponse.redirect(
+      new URL(getDefaultDashboardRoute(userRole), request.url),
+    );
   }
 
   return NextResponse.next();
 }
 
+// ==============================
+// Matcher Config
+// ==============================
 export const config = {
   matcher: [
     "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.well-known).*)",

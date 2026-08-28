@@ -18,7 +18,7 @@ import { dashboardNav } from "@/lib/navItems.config";
 import { SidebarFooter } from "@/components/ui/sidebar";
 import LogoutButton from "../shared/LogoutButton";
 import { useState } from "react";
-import { logoutUser } from "@/services/auth.service";
+import { logoutAction } from "@/services/auth/auth.service";
 
 export function MobileNav({ role }: { role: UserRole }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -78,7 +78,7 @@ export function MobileNav({ role }: { role: UserRole }) {
           {collapsed ? (
             <button
               onClick={async () => {
-                await logoutUser();
+                await logoutAction();
               }}
               className="p-2 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/20 rounded-md transition"
               title="Logout"

@@ -1,5 +1,5 @@
-import { getNewAccessToken } from "@/services/auth.service";
-import { getCookie } from "./tokenHandler";
+import { getNewAccessToken } from "@/services/auth/auth.service";
+import { getCookie } from "@/services/auth/tokenHandler";
 
 
 const BACKEND_API_URL =

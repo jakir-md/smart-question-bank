@@ -1,13 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { logoutUser } from "@/services/auth.service";
+import { logoutAction } from "@/services/auth/auth.service";
 
 import { LogOut } from "lucide-react";
 
 const LogoutButton = () => {
   const handleLogout = async () => {
-    await logoutUser();
+    await logoutAction();
   };
   return (
     <Button className="w-full" variant={"destructive"} onClick={handleLogout}>

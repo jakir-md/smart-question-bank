@@ -12,7 +12,7 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { resetPassword } from "@/services/auth.service";
+import { resetPassword } from "@/services/auth/auth.service";
 
 type ResetPasswordValues = {
   phone: string;

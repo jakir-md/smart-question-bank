@@ -8,7 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { ArrowLeft, Loader2, Phone } from "lucide-react"; // Mail এর বদলে Phone
-import { forgotPassword } from "@/services/auth.service";
+import { forgotPassword } from "@/services/auth/auth.service";
 
 type ForgotPasswordValues = {
   phone: string;

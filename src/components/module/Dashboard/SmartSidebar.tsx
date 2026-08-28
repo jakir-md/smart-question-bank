@@ -15,7 +15,7 @@ import {
 import { UserRole } from "@/lib/auth-utils";
 import { dashboardNav, type NavItem } from "@/lib/navItems.config";
 import LogoutButton from "../shared/LogoutButton";
-import { logoutUser } from "@/services/auth.service";
+import { logoutAction } from "@/services/auth/auth.service";
 
 export function SmartSidebar({ role }: { role: UserRole }) {
   const pathname = usePathname();
@@ -39,7 +39,7 @@ export function SmartSidebar({ role }: { role: UserRole }) {
   };
 
   const handleLogout = async () => {
-    await logoutUser();
+    await logoutAction();
   };
 
   return (

@@ -1,6 +1,6 @@
 //src/lib/auth-utils.ts
 
-export type UserRole = "ADMIN" | "STUDENT" | "DRIVER" ;
+export type UserRole = "ADMIN" | "STUDENT" ;
 
 export type RouteConfig = {
     exact: string[],
@@ -16,10 +16,6 @@ export const commonProtectedRoutes: RouteConfig = {
 
 export const studentProtectedRoutes: RouteConfig = {
     patterns: [/^\/student/], // Routes starting with /
-    exact: [], 
-}
-export const driverProtectedRoutes: RouteConfig = {
-    patterns: [/^\/driver/], // Routes starting with /driver/*
     exact: [], 
 }
 export const adminProtectedRoutes: RouteConfig = {
@@ -41,13 +37,9 @@ export const isRouteMatches = (pathname: string, routes: RouteConfig): boolean =
     
 }
 
-export const getRouteOwner = (pathname: string): "ADMIN" | "STUDENT" | "DRIVER" | "COMMON" | null => {
+export const getRouteOwner = (pathname: string): "ADMIN" | "STUDENT" | "COMMON" | null => {
     if (isRouteMatches(pathname, adminProtectedRoutes)) {
         return "ADMIN";
-    }
-    
-     if (isRouteMatches(pathname,  driverProtectedRoutes)) {
-        return "DRIVER";
     }
     if (isRouteMatches(pathname, studentProtectedRoutes)) {
         return "STUDENT";
@@ -58,19 +50,16 @@ export const getRouteOwner = (pathname: string): "ADMIN" | "STUDENT" | "DRIVER" 
     return null;
 }
 
-export const getDefaultDashboardRoute = (role: UserRole): string => {
-    if (role === "ADMIN") {
-        return "/admin/dashboard";
-    }
-    if (role === "STUDENT") {
-        return "/student/dashboard";
-    }
-    if (role === "DRIVER") {
-        return "/driver/dashboard";
-    }
-    
+export const getDefaultDashboardRoute = (role: UserRole | UserRole[]): string => {
+  const normalizedRole = Array.isArray(role) ? role[0] : role;
+  if (normalizedRole === "ADMIN") {
+    return "/admin/dashboard";
+  }
+  if (normalizedRole === "STUDENT") {
     return "/";
-}
+  }
+  return "/";
+};
 
 export const isValidRedirectForRole = (redirectPath: string, role: UserRole): boolean => {
     const routeOwner = getRouteOwner(redirectPath);

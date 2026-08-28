@@ -78,37 +78,4 @@ export const dashboardNav: Record<UserRole, NavItem[]> = {
       icon: BellRing,
     },
   ],
-
-  /* ================= SUPER ADMIN ================= */
-  DRIVER: [
-    { title: "Dashboard", href: "/driver/dashboard", icon: LayoutDashboard },
-    { title: "Add-Hall", href: "/driver/dashboard/add-hall", icon: Plus },
-    {
-      title: "Add-Hall-Admin",
-      href: "/driver/dashboard/add-hall-admin",
-      icon: Plus,
-    },
-    {
-      title: "Failed Transactions",
-      href: "/driver/dashboard/failed-transactions",
-      icon: Wallet,
-    },
-    {
-      title: "Hall Wallets",
-      href: "/driver/dashboard/hall-wallets",
-      icon: CreditCard,
-    },
-    {
-      title: "Transaction Reports",
-      href: "/driver/dashboard/transaction-reports",
-      icon: BarChart,
-    },
-
-    {
-      title: "change password",
-      href: "/driver/dashboard/change-password",
-      icon: Lock,
-    },
-  ],
- 
 };
