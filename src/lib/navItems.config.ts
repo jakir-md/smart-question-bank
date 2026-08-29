@@ -11,6 +11,9 @@ import {
   Wallet,
   BellRing,
   Settings,
+  Network,
+  Tags,
+  FileQuestion,
 } from "lucide-react";
 import { UserRole } from "./auth-utils";
 
@@ -45,9 +48,24 @@ export const dashboardNav: Record<UserRole, NavItem[]> = {
     },
   ],
 
-  /* ================= HALL ADMIN ================= */
+  /* ================= ADMIN ================= */
   ADMIN: [
     { title: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+    {
+      title: "MCQ Ingestion",
+      href: "/admin/dashboard/mcq-ingestion",
+      icon: FileQuestion,
+    },
+    {
+      title: "Curriculum Taxonomy",
+      href: "/admin/dashboard/curriculum-taxonomy",
+      icon: Network,
+    },
+    {
+      title: "Metadata & Tags",
+      href: "/admin/dashboard/metadata-tags",
+      icon: Tags,
+    },
     {
       title: "Add Student Whitelist",
       href: "/admin/dashboard/add-student-whitelist",

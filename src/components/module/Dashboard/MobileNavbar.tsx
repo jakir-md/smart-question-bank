@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { UserRole } from "@/lib/auth-utils";
-import { dashboardNav } from "@/lib/navItems.config";
+import { dashboardNav, NavItem } from "@/lib/navItems.config";
 import { SidebarFooter } from "@/components/ui/sidebar";
 import LogoutButton from "../shared/LogoutButton";
 import { useState } from "react";
@@ -54,7 +54,7 @@ export function MobileNav({ role }: { role: UserRole }) {
 
         {/* Added flex-1 to push the footer down, and overflow-y-auto for scrolling */}
         <nav className="p-4 space-y-1 flex-1 overflow-y-auto">
-          {navItems.map((item) => {
+          {navItems.map((item: NavItem) => {
             const isActive = isActiveMenu(item.href);
             return (
               <Link
