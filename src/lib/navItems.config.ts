@@ -13,6 +13,7 @@ import {
   Settings,
   Network,
   Tags,
+  FileQuestion,
 } from "lucide-react";
 import { UserRole } from "./auth-utils";
 
@@ -50,6 +51,11 @@ export const dashboardNav: Record<UserRole, NavItem[]> = {
   /* ================= ADMIN ================= */
   ADMIN: [
     { title: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+    {
+      title: "MCQ Ingestion",
+      href: "/admin/dashboard/mcq-ingestion",
+      icon: FileQuestion,
+    },
     {
       title: "Curriculum Taxonomy",
       href: "/admin/dashboard/curriculum-taxonomy",
