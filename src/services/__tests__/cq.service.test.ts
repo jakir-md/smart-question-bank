@@ -95,7 +95,7 @@ describe("Client CQ Ingestion Service", () => {
     expect(response.data.id).toBe("ctx-cq-1");
   });
 
-  it("should fetch paginated CQs with search and difficulty filters", async () => {
+  it("should fetch paginated CQs with full filter parameters", async () => {
     const mockCQs = {
       success: true,
       statusCode: 200,
@@ -118,13 +118,23 @@ describe("Client CQ Ingestion Service", () => {
 
     const response = await CQService.getCQs({
       search: "বর্তনী",
+      educationLevelId: "level-1",
+      subjectId: "sub-1",
+      chapterId: "chap-1",
+      topicId: "top-1",
       difficulty: "MEDIUM",
+      tags: ["Dhaka", "Physics"],
+      operator: "AND",
+      isActive: true,
+      isPublished: true,
       page: 1,
       limit: 10,
+      sortBy: "createdAt",
+      sortOrder: "desc",
     });
 
     expect(fetch).toHaveBeenCalledWith(
-      expect.stringContaining("cq-ingestion/questions?search=%E0%A6%AC%E0%A6%B0%E0%A7%8D%E0%A6%A4%E0%A6%A8%E0%A7%80&difficulty=MEDIUM&page=1&limit=10"),
+      expect.stringContaining("cq-ingestion/questions?search=%E0%A6%AC%E0%A6%B0%E0%A7%8D%E0%A6%A4%E0%A6%A8%E0%A7%80&educationLevelId=level-1&subjectId=sub-1&chapterId=chap-1&topicId=top-1&difficulty=MEDIUM&tags=Dhaka%2CPhysics&operator=AND&isActive=true&isPublished=true&page=1&limit=10&sortBy=createdAt&sortOrder=desc"),
       expect.anything(),
     );
     expect(response.data).toHaveLength(1);
@@ -155,6 +165,63 @@ describe("Client CQ Ingestion Service", () => {
       expect.anything(),
     );
     expect(response.data.id).toBe("ctx-100");
+  });
+
+  it("should update CQ with PATCH request", async () => {
+    const mockUpdated = {
+      success: true,
+      statusCode: 200,
+      message: "Creative Question updated successfully",
+      data: {
+        id: "ctx-100",
+        title: "আপডেট দৃশ্যকল্প ১",
+        contextText: "আপডেট উদ্দীপকের বিবরণ...",
+      },
+    };
+
+    (fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve(mockUpdated),
+    });
+
+    const updatePayload = {
+      stimulus: { title: "আপডেট দৃশ্যকল্প ১" },
+    };
+
+    const response = await CQService.updateCQ("ctx-100", updatePayload);
+
+    expect(fetch).toHaveBeenCalledWith(
+      expect.stringContaining("cq-ingestion/questions/ctx-100"),
+      expect.objectContaining({
+        method: "PATCH",
+        body: JSON.stringify(updatePayload),
+      }),
+    );
+    expect(response.data.title).toBe("আপডেট দৃশ্যকল্প ১");
+  });
+
+  it("should delete CQ by UUID with DELETE request", async () => {
+    const mockDeleteRes = {
+      success: true,
+      statusCode: 200,
+      message: "Creative Question deleted successfully",
+      data: { success: true, message: "Deleted" },
+    };
+
+    (fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve(mockDeleteRes),
+    });
+
+    const response = await CQService.deleteCQ("ctx-100");
+
+    expect(fetch).toHaveBeenCalledWith(
+      expect.stringContaining("cq-ingestion/questions/ctx-100"),
+      expect.objectContaining({
+        method: "DELETE",
+      }),
+    );
+    expect(response.success).toBe(true);
   });
 
   it("should fetch CQ statistics summary", async () => {
@@ -189,5 +256,16 @@ describe("Client CQ Ingestion Service", () => {
     );
     expect(response.data.totalCQSets).toBe(25);
     expect(response.data.totalSubQuestions).toBe(100);
+  });
+
+  it("should throw error when server returns non-ok response", async () => {
+    (fetch as any).mockResolvedValueOnce({
+      ok: false,
+      status: 404,
+      statusText: "Not Found",
+      json: () => Promise.resolve({ success: false, message: "CQ not found" }),
+    });
+
+    await expect(CQService.getCQById("unknown-id")).rejects.toThrowError("CQ not found");
   });
 });
