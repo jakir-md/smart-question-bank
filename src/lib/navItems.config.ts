@@ -14,6 +14,7 @@ import {
   Network,
   Tags,
   FileQuestion,
+  BookOpen,
 } from "lucide-react";
 import { UserRole } from "./auth-utils";
 
@@ -55,6 +56,11 @@ export const dashboardNav: Record<UserRole, NavItem[]> = {
       title: "MCQ Ingestion",
       href: "/admin/dashboard/mcq-ingestion",
       icon: FileQuestion,
+    },
+    {
+      title: "CQ Ingestion",
+      href: "/admin/dashboard/cq-ingestion",
+      icon: BookOpen,
     },
     {
       title: "Curriculum Taxonomy",
