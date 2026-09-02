@@ -80,7 +80,7 @@ export function CQFilterExplorer({ refreshTrigger = 0, onRefreshNeeded }: CQFilt
 
   useEffect(() => {
     if (selectedLevelId) {
-      TaxonomyService.getSubjects(selectedLevelId).then((res) => setSubjects(res.data || [])).catch(() => {});
+      TaxonomyService.getSubjects({ educationLevelId: selectedLevelId, isActive: true }).then((res) => setSubjects(res.data || [])).catch(() => {});
     } else {
       setSubjects([]);
       setSelectedSubjectId("");
@@ -332,7 +332,7 @@ export function CQFilterExplorer({ refreshTrigger = 0, onRefreshNeeded }: CQFilt
                   <div className="p-4 rounded-xl border border-border/70 bg-muted/10 space-y-2">
                     <div className="text-xs font-semibold text-primary">উদ্দীপক (Stimulus):</div>
                     <div className="text-xs text-foreground leading-relaxed">
-                      <LatexRenderer text={cq.contextText} />
+                      <LatexRenderer content={cq.contextText} />
                     </div>
 
                     {/* Media Preview if attached */}
@@ -376,7 +376,7 @@ export function CQFilterExplorer({ refreshTrigger = 0, onRefreshNeeded }: CQFilt
                               <div className="flex items-start gap-2 flex-1">
                                 <span className="font-bold text-primary text-sm">({label})</span>
                                 <div className="text-foreground leading-relaxed flex-1">
-                                  <LatexRenderer text={sub.questionText} />
+                                  <LatexRenderer content={sub.questionText} />
                                 </div>
                               </div>
                               <Badge variant="outline" className="text-[11px] font-mono shrink-0">
@@ -389,7 +389,7 @@ export function CQFilterExplorer({ refreshTrigger = 0, onRefreshNeeded }: CQFilt
                                 <div className="font-semibold text-emerald-600 dark:text-emerald-400 mb-0.5">
                                   আদর্শ উত্তর ও সমাধান:
                                 </div>
-                                <LatexRenderer text={sub.explanation} />
+                                <LatexRenderer content={sub.explanation} />
                               </div>
                             )}
                           </div>
