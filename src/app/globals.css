@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "katex/dist/katex.min.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -36,10 +35,45 @@
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-light: var(--primary-light);
+  --color-primary-fixed: var(--primary-fixed);
+  --color-primary-fixed-dim: var(--primary-fixed-dim);
+  --color-on-primary-fixed-variant: var(--on-primary-fixed-variant);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+
+  /* Lumina Learn Brand Theme Mappings */
+  --color-on-primary: var(--on-primary);
+  --color-surface: var(--surface);
+  --color-surface-dim: var(--surface-dim);
+  --color-surface-tint: var(--surface-tint);
+  --color-on-surface: var(--on-surface);
+  --color-on-surface-variant: var(--on-surface-variant);
+  --color-surface-variant: var(--surface-variant);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+  --color-outline: var(--outline);
+  --color-outline-variant: var(--outline-variant);
+  --color-primary-container: var(--primary-container);
+  --color-on-primary-container: var(--on-primary-container);
+  --color-secondary-container: var(--secondary-container);
+  --color-on-secondary-container: var(--on-secondary-container);
+  --color-secondary-fixed: var(--secondary-fixed);
+  --color-secondary-fixed-dim: var(--secondary-fixed-dim);
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-container: var(--tertiary-container);
+  --color-on-tertiary-container: var(--on-tertiary-container);
+  --color-error: var(--error);
+  --color-on-error: var(--on-error);
+  --color-error-container: var(--error-container);
+  --color-on-error-container: var(--on-error-container);
+
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -50,72 +84,138 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --background: #f5faf8;
+  --foreground: #171d1c;
+  --card: #ffffff;
+  --card-foreground: #171d1c;
+  --popover: #ffffff;
+  --popover-foreground: #171d1c;
+  
+  /* Brand Theme Colors */
+  --primary: #00685f;
+  --on-primary: #ffffff;
+  --primary-hover: #005049;
+  --primary-light: #f4fffc;
+  --primary-container: #008378;
+  --on-primary-container: #f4fffc;
+  --primary-fixed: #89f5e7;
+  --primary-fixed-dim: #6bd8cb;
+  --on-primary-fixed-variant: #005049;
+  
+  --secondary: #505f76;
+  --secondary-container: #d0e1fb;
+  --on-secondary-container: #54647a;
+  --secondary-foreground: #171d1c;
+  --secondary-fixed: #d3e4fe;
+  --secondary-fixed-dim: #b7c8e1;
+
+  --tertiary: #924628;
+  --tertiary-container: #b05e3d;
+  --on-tertiary-container: #fffbff;
+  
+  --surface: #f5faf8;
+  --surface-dim: #d6dbd9;
+  --surface-tint: #006a61;
+  --on-surface: #171d1c;
+  --on-surface-variant: #3d4947;
+  --surface-variant: #dee4e1;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f0f5f2;
+  --surface-container: #eaefed;
+  --surface-container-high: #e4e9e7;
+  --surface-container-highest: #dee4e1;
+  
+  --outline: #6d7a77;
+  --outline-variant: #bcc9c6;
+  --error: #ba1a1a;
+  --on-error: #ffffff;
+  --error-container: #ffdad6;
+  --on-error-container: #93000a;
+  
+  --destructive: #ba1a1a;
+  --border: #bcc9c6;
+  --input: #bcc9c6;
+  --ring: #00685f;
+  --chart-1: #00685f;
+  --chart-2: #505f76;
+  --chart-3: #924628;
+  --chart-4: #bcc9c6;
+  --chart-5: #3d4947;
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  
+  --sidebar: #eaefed;
+  --sidebar-foreground: #171d1c;
+  --sidebar-primary: #00685f;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f0f5f2;
+  --sidebar-accent-foreground: #171d1c;
+  --sidebar-border: #bcc9c6;
+  --sidebar-ring: #00685f;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #171d1c;
+  --foreground: #edf2f0;
+  --card: #2c3130;
+  --card-foreground: #edf2f0;
+  --popover: #2c3130;
+  --popover-foreground: #edf2f0;
+  
+  /* Brand Theme Colors */
+  --primary: #6bd8cb;
+  --on-primary: #003731;
+  --primary-hover: #005049;
+  --primary-light: #00201d;
+  --primary-container: #00685f;
+  --on-primary-container: #f4fffc;
+  --primary-fixed: #89f5e7;
+  --primary-fixed-dim: #6bd8cb;
+  --on-primary-fixed-variant: #005049;
+  
+  --secondary: #b7c8e1;
+  --secondary-container: #38485d;
+  --on-secondary-container: #d0e1fb;
+  --secondary-foreground: #edf2f0;
+  --secondary-fixed: #d3e4fe;
+  --secondary-fixed-dim: #b7c8e1;
+
+  --tertiary: #ffb59a;
+  --tertiary-container: #b05e3d;
+  --on-tertiary-container: #fffbff;
+  
+  --surface: #171d1c;
+  --surface-dim: #171d1c;
+  --surface-tint: #6bd8cb;
+  --on-surface: #edf2f0;
+  --on-surface-variant: #bcc9c6;
+  --surface-variant: #3d4947;
+  --surface-container-lowest: #171d1c;
+  --surface-container-low: #2c3130;
+  --surface-container: #2c3130;
+  --surface-container-high: #3d4947;
+  --surface-container-highest: #4a5654;
+  
+  --outline: #bcc9c6;
+  --outline-variant: #3d4947;
+  --error: #ffb4ab;
+  --on-error: #690005;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
+  
+  --destructive: #ffb4ab;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.15);
+  --ring: #6bd8cb;
+  --radius: 0.625rem;
+  
+  --sidebar: #2c3130;
+  --sidebar-foreground: #edf2f0;
+  --sidebar-primary: #6bd8cb;
+  --sidebar-primary-foreground: #003731;
+  --sidebar-accent: #3d4947;
+  --sidebar-accent-foreground: #edf2f0;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: #6bd8cb;
 }
 
 @layer base {
@@ -128,4 +228,20 @@
   html {
     @apply font-sans;
   }
+}
+
+/* Elevation and helper utilities from Lumina Learn template */
+.elevation-0 {
+  background-color: #ffffff;
+}
+.elevation-1 {
+  background-color: #f8fafc;
+}
+.elevation-2 {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.04);
+}
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 16px);
 }

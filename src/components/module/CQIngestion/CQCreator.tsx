@@ -173,7 +173,7 @@ export function CQCreator({ onSuccess }: CQCreatorProps) {
       setSelectedSubjectId("");
       return;
     }
-    TaxonomyService.getSubjects(selectedLevelId).then((res) => {
+    TaxonomyService.getSubjects({ educationLevelId: selectedLevelId, isActive: true }).then((res) => {
       setSubjects(res.data || []);
       if (res.data && res.data.length > 0) {
         setSelectedSubjectId(res.data[0].id);
@@ -596,7 +596,7 @@ export function CQCreator({ onSuccess }: CQCreatorProps) {
                   উদ্দীপক লাইভ প্রিভিউ (LaTeX Live Rendering):
                 </div>
                 <div className="text-xs text-foreground leading-relaxed pl-2 border-l-2 border-primary/40">
-                  <LatexRenderer text={stimulusText || "উদ্দীপকের প্রিভিউ এখানে প্রদর্শিত হবে..."} />
+                  <LatexRenderer content={stimulusText || "উদ্দীপকের প্রিভিউ এখানে প্রদর্শিত হবে..."} />
                 </div>
               </div>
             </CardContent>
@@ -770,7 +770,7 @@ export function CQCreator({ onSuccess }: CQCreatorProps) {
                         <div className="text-xs font-semibold text-primary">লাইভ প্রিভিউ:</div>
                         <div className="text-xs text-foreground pl-2 border-l-2 border-primary/40">
                           <span className="font-bold mr-1">({q.label})</span>
-                          <LatexRenderer text={q.questionText || `(${q.label}) এর প্রশ্ন এখানে দেখা যাবে...`} />
+                          <LatexRenderer content={q.questionText || `(${q.label}) এর প্রশ্ন এখানে দেখা যাবে...`} />
                         </div>
                       </div>
                     </div>

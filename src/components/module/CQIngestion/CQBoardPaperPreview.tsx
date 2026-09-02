@@ -88,7 +88,7 @@ export function CQBoardPaperPreview({
 
           {/* Stimulus Body with KaTeX */}
           <div className="text-sm leading-relaxed text-foreground">
-            <LatexRenderer text={stimulus.contextText || "উদ্দীপক এখনো লেখা হয়নি..."} />
+            <LatexRenderer content={stimulus.contextText || "উদ্দীপক এখনো লেখা হয়নি..."} />
           </div>
 
           {/* Optional Diagram / Media */}
@@ -137,7 +137,7 @@ export function CQBoardPaperPreview({
                       ({q.label})
                     </span>
                     <div className="text-foreground leading-relaxed flex-1">
-                      <LatexRenderer text={q.questionText || `(${q.label}) এর প্রশ্ন এখনো লেখা হয়নি...`} />
+                      <LatexRenderer content={q.questionText || `(${q.label}) এর প্রশ্ন এখনো লেখা হয়নি...`} />
                     </div>
                   </div>
 
@@ -168,7 +168,7 @@ export function CQBoardPaperPreview({
                     </div>
                     <div className="text-xs text-muted-foreground leading-relaxed">
                       <LatexRenderer
-                        text={q.explanation || "এই প্রশ্নের জন্য কোনো নমুনা উত্তর বা নির্দেশিকা যোগ করা হয়নি।"}
+                        content={q.explanation || "এই প্রশ্নের জন্য কোনো নমুনা উত্তর বা নির্দেশিকা যোগ করা হয়নি।"}
                       />
                     </div>
                   </div>
