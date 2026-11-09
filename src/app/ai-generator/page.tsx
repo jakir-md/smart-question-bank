@@ -1,21 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { generateAIQuestion } from "@/services/ai.service";
+import { handleGenerateAIQuestion } from "@/controllers/ai.controller";
 
-export default function AIGeneratorPage() {
+export default function AIGeneratorView() {
   const [topic, setTopic] = useState("");
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleGenerate = async () => {
+  const onSubmit = async () => {
     if (!topic) return alert("Please enter a topic");
     setLoading(true);
     try {
-      const data = await generateAIQuestion({ topic, difficulty: "Medium" });
+      const data = await handleGenerateAIQuestion({ topic, difficulty: "Medium" });
       setResult(data);
-    } catch (err) {
-      alert("Failed to generate question. Check console for details.");
+    } catch (err: any) {
+      alert(err.message || "Failed to generate question.");
     } finally {
       setLoading(false);
     }
@@ -32,7 +32,7 @@ export default function AIGeneratorPage() {
         className="w-full p-2 border rounded mb-4 text-black"
       />
       <button
-        onClick={handleGenerate}
+        onClick={onSubmit}
         disabled={loading}
         className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
       >
